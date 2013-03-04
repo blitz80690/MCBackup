@@ -1,5 +1,6 @@
 ﻿Imports Scripting
 Imports System.IO
+Imports System.Net
 Imports System.Threading
 Imports Microsoft.WindowsAPICodePack.Taskbar
 
@@ -10,38 +11,50 @@ Public Class Main
     Public BackupButtonPressed, BackupAll, BackupError, RestoreAll, ClearError, RestoreError As Boolean
     Private ShowAutoBackupButtonPressed As Boolean
 
+    Dim FileStream As FileStream
+    Dim StreamWriter As StreamWriter
+
     Declare Function ChangeProgressBarColor Lib "user32" Alias "SendMessageA" (ByVal hwnd As Integer, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
 
     Private Sub Main_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        My.Computer.FileSystem.CreateDirectory(APPDATA & "\.mcbackup\logs")
+
+        If Not My.Computer.FileSystem.FileExists(APPDATA + "\.mcbackup\logs\mcbackup.log") Then
+            IO.File.Create(APPDATA + "\.mcbackup\logs\mcbackup.log").Dispose()
+        End If
+
+        FileStream = New FileStream((APPDATA + "\.mcbackup\logs\mcbackup.log"), FileMode.Append, FileAccess.Write)
+        StreamWriter = New StreamWriter(FileStream, System.Text.Encoding.Default)
+
+        StreamWriter.WriteLine("------ New Log Session : " & LogTimeStamp() & "------")
+        StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Program Initialized")
+
         Dim SearchFolder As Boolean = False
         Dim UpdateAvail As Boolean = False
 
         If Not My.Computer.FileSystem.FileExists(My.Settings.MCFolder & "\bin\minecraft.jar") Then
             If My.Computer.FileSystem.FileExists(APPDATA & "\.minecraft\bin\minecraft.jar") Then
                 My.Settings.MCFolder = APPDATA & "\.minecraft"
+                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Set Minecraft Folder Setting to " & APPDATA + "\.minecraft")
             Else
                 MsgBox("MCBackup was unable to find an installed Minecraft on your computer." & vbNewLine & "Please locate and select the folder in which Minecraft is installed before continuing.", MsgBoxStyle.Critical, "Error!")
-                SearchFolder = True
+                StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] Could not find Minecraft install on the system.")
+                SearchForMCFolder()
+                Exit Sub
             End If
         End If
 
         If Not My.Computer.FileSystem.DirectoryExists(My.Settings.BkpsFolder) Then
-            If My.Settings.BkpsFolder = APPDATA & "\.mcbackup\backups" Then
-                My.Computer.FileSystem.CreateDirectory(APPDATA & "\.mcbackup\backups")
-            Else
-                If Not My.Computer.FileSystem.DirectoryExists(APPDATA & "\.mcbackup\backups") Then
-                    My.Computer.FileSystem.CreateDirectory(APPDATA & "\.mcbackup\backups")
-                End If
+            StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] Could not find saved backups folder.")
+            If My.Computer.FileSystem.DirectoryExists(APPDATA & "\.mcbackup\backups") Then
                 My.Settings.BkpsFolder = APPDATA & "\.mcbackup\backups"
+                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Set Backups Folder Setting to " & APPDATA + "\.mcbackup\backups")
+            Else
+                My.Computer.FileSystem.CreateDirectory(APPDATA & "\.mcbackup\backups")
+                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Created folder " & APPDATA + "\.mcbackup\backups")
+                My.Settings.BkpsFolder = APPDATA & "\.mcbackup\backups"
+                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Set Backups Folder Setting to " & APPDATA + "\.mcbackup\backups")
             End If
-        End If
-
-        If SearchFolder = True Then
-            SearchForMCFolder()
-        End If
-
-        If UpdateAvail = True Then
-
         End If
 
         LoadBackups()
@@ -467,5 +480,20 @@ Public Class Main
         If My.Settings.ShowWelcomeDialog = True Then
             WelcomeDialog.ShowDialog()
         End If
+    End Sub
+
+    Private Function LogTimeStamp()
+        Dim Day As String = Format(Now(), "dd")
+        Dim Month As String = Format(Now(), "MM")
+        Dim Year As String = Format(Now(), "yyyy")
+        Dim Hours As String = Format(Now(), "hh")
+        Dim Minutes As String = Format(Now(), "mm")
+        Dim Seconds As String = Format(Now(), "ss")
+
+        Return Year & "-" & Month & "-" & Day & " " & Hours & ":" & Minutes & ":" & Seconds & " "
+    End Function
+
+    Private Sub Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        StreamWriter.Close()
     End Sub
 End Class
