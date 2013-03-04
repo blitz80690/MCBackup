@@ -432,7 +432,7 @@ Partial Class Main
         Me.MaximizeBox = False
         Me.Name = "Main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = " MCBackup 2.2.3"
+        Me.Text = " MCBackup 2.3.0"
         Me.MenuStrip.ResumeLayout(False)
         Me.MenuStrip.PerformLayout()
         CType(Me.TimeUpDown, System.ComponentModel.ISupportInitialize).EndInit()
