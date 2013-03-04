@@ -9,9 +9,14 @@
 
 
     Private Sub WelcomeDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If My.Computer.Network.Ping("70.33.246.120") <> Nothing Then
+        Try
+            My.Computer.Network.Ping("70.33.246.120")
+            WebBrowser.Navigate("http://content.nicoco007.com/downloads/mcbackup/welcome/news.html")
             NoConnectionLabel.Visible = False
-            WebBrowser.Navigate("C:\Users\Nicolas\Desktop\news.html")
-        End If
+            ConnectingLabel.Visible = False
+        Catch ex As Exception
+            NoConnectionLabel.Visible = True
+            ConnectingLabel.Visible = False
+        End Try
     End Sub
 End Class

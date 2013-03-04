@@ -29,6 +29,7 @@ Partial Class WelcomeDialog
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.NoConnectionLabel = New System.Windows.Forms.Label()
+        Me.ConnectingLabel = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -97,18 +98,31 @@ Partial Class WelcomeDialog
         Me.NoConnectionLabel.BackColor = System.Drawing.Color.White
         Me.NoConnectionLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NoConnectionLabel.ForeColor = System.Drawing.Color.Red
-        Me.NoConnectionLabel.Location = New System.Drawing.Point(167, 183)
+        Me.NoConnectionLabel.Location = New System.Drawing.Point(179, 183)
         Me.NoConnectionLabel.Name = "NoConnectionLabel"
-        Me.NoConnectionLabel.Size = New System.Drawing.Size(251, 26)
+        Me.NoConnectionLabel.Size = New System.Drawing.Size(226, 26)
         Me.NoConnectionLabel.TabIndex = 9
-        Me.NoConnectionLabel.Text = "Can't connect to minecraft.nicoco007.com;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "News will not be loaded."
+        Me.NoConnectionLabel.Text = "Can't connect to www.nicoco007.com;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "News will not be loaded."
         Me.NoConnectionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'ConnectingLabel
+        '
+        Me.ConnectingLabel.AutoSize = True
+        Me.ConnectingLabel.BackColor = System.Drawing.Color.Transparent
+        Me.ConnectingLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ConnectingLabel.ForeColor = System.Drawing.Color.DarkCyan
+        Me.ConnectingLabel.Location = New System.Drawing.Point(183, 190)
+        Me.ConnectingLabel.Name = "ConnectingLabel"
+        Me.ConnectingLabel.Size = New System.Drawing.Size(219, 13)
+        Me.ConnectingLabel.TabIndex = 11
+        Me.ConnectingLabel.Text = "Connecting to www.nicoco007.com..."
         '
         'WelcomeDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(584, 307)
+        Me.Controls.Add(Me.ConnectingLabel)
         Me.Controls.Add(Me.NoConnectionLabel)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
@@ -132,4 +146,5 @@ Partial Class WelcomeDialog
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents NoConnectionLabel As System.Windows.Forms.Label
+    Friend WithEvents ConnectingLabel As System.Windows.Forms.Label
 End Class
