@@ -34,9 +34,9 @@ Partial Class ApplicationOptionsDialog
         Me.ResetButton = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.ShowWelcomeMessageCheckBox = New System.Windows.Forms.CheckBox()
         Me.ShowTooltipsCheckBox = New System.Windows.Forms.CheckBox()
         Me.ShowDeleteDialogCheckBox = New System.Windows.Forms.CheckBox()
-        Me.ShowWelcomeMessageCheckBox = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -53,9 +53,9 @@ Partial Class ApplicationOptionsDialog
         '
         'MCFolderTextBox
         '
-        Me.MCFolderTextBox.Enabled = False
         Me.MCFolderTextBox.Location = New System.Drawing.Point(137, 21)
         Me.MCFolderTextBox.Name = "MCFolderTextBox"
+        Me.MCFolderTextBox.ReadOnly = True
         Me.MCFolderTextBox.Size = New System.Drawing.Size(375, 20)
         Me.MCFolderTextBox.TabIndex = 1
         '
@@ -81,9 +81,9 @@ Partial Class ApplicationOptionsDialog
         '
         'BkpsFolderTextBox
         '
-        Me.BkpsFolderTextBox.Enabled = False
         Me.BkpsFolderTextBox.Location = New System.Drawing.Point(137, 47)
         Me.BkpsFolderTextBox.Name = "BkpsFolderTextBox"
+        Me.BkpsFolderTextBox.ReadOnly = True
         Me.BkpsFolderTextBox.Size = New System.Drawing.Size(375, 20)
         Me.BkpsFolderTextBox.TabIndex = 4
         '
@@ -142,6 +142,16 @@ Partial Class ApplicationOptionsDialog
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Appearance Options"
         '
+        'ShowWelcomeMessageCheckBox
+        '
+        Me.ShowWelcomeMessageCheckBox.AutoSize = True
+        Me.ShowWelcomeMessageCheckBox.Location = New System.Drawing.Point(7, 68)
+        Me.ShowWelcomeMessageCheckBox.Name = "ShowWelcomeMessageCheckBox"
+        Me.ShowWelcomeMessageCheckBox.Size = New System.Drawing.Size(190, 17)
+        Me.ShowWelcomeMessageCheckBox.TabIndex = 14
+        Me.ShowWelcomeMessageCheckBox.Text = "Show welcome message at startup"
+        Me.ShowWelcomeMessageCheckBox.UseVisualStyleBackColor = True
+        '
         'ShowTooltipsCheckBox
         '
         Me.ShowTooltipsCheckBox.AutoSize = True
@@ -161,16 +171,6 @@ Partial Class ApplicationOptionsDialog
         Me.ShowDeleteDialogCheckBox.TabIndex = 12
         Me.ShowDeleteDialogCheckBox.Text = "Show ""Are you sure"" message when deleting a backup"
         Me.ShowDeleteDialogCheckBox.UseVisualStyleBackColor = True
-        '
-        'ShowWelcomeMessageCheckBox
-        '
-        Me.ShowWelcomeMessageCheckBox.AutoSize = True
-        Me.ShowWelcomeMessageCheckBox.Location = New System.Drawing.Point(7, 68)
-        Me.ShowWelcomeMessageCheckBox.Name = "ShowWelcomeMessageCheckBox"
-        Me.ShowWelcomeMessageCheckBox.Size = New System.Drawing.Size(190, 17)
-        Me.ShowWelcomeMessageCheckBox.TabIndex = 14
-        Me.ShowWelcomeMessageCheckBox.Text = "Show welcome message at startup"
-        Me.ShowWelcomeMessageCheckBox.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsDialog
         '
