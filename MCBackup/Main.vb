@@ -40,7 +40,6 @@ Public Class Main
                 MsgBox("MCBackup was unable to find an installed Minecraft on your computer." & vbNewLine & "Please locate and select the folder in which Minecraft is installed before continuing.", MsgBoxStyle.Critical, "Error!")
                 StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] Could not find Minecraft install on the system.")
                 SearchForMCFolder()
-                Exit Sub
             End If
         End If
 
@@ -171,12 +170,14 @@ Public Class Main
         If BackupError = True Then
             StatusLabel.Text = "Error!"
             MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Error!", "There was an error while backing up.", ToolTipIcon.Error)
-            MsgBox("Error:" & vbNewLine & BackupErrorDesc, MsgBoxStyle.Critical, "Error!")
+            MsgBox("There was an error while backing up. Please check the log for more information.", MsgBoxStyle.Critical, "Error!")
+            StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] " & BackupErrorDesc)
             ChangeProgressBarColor(ProgressBar.Handle, 1040, 2, 0)
             TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error)
             StatusLabel.Text = "Ready!"
             Exit Sub
         End If
+        StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Successfully backed up """ & BackupName & """")
         ProgressBar.Value = 100
         TaskbarManager.Instance.SetProgressValue(100, 100)
         StatusLabel.Text = "Backup Finised - Ready!"
@@ -424,6 +425,7 @@ Public Class Main
     End Sub
 
     Public Sub StartBackup()
+        StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Starting backup """ & BackupName & """")
         ChangeProgressBarColor(ProgressBar.Handle, 1040, 1, 0)
         TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal)
         If BackupAll = True Then
