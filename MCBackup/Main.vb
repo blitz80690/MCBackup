@@ -323,7 +323,7 @@ Public Class Main
         RestoreTimer.Stop()
         If RestoreError = True Then
             StatusLabel.Text = "Error!"
-            MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Error!", "There was an error while the restore.", ToolTipIcon.Error)
+            MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Error!", "There was an error during the restore.", ToolTipIcon.Error)
             MsgBox("Error:" & vbNewLine & RestoreErrorDesc, MsgBoxStyle.Critical, "Error!")
             ChangeProgressBarColor(ProgressBar.Handle, 1040, 2, 0)
             TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error)
