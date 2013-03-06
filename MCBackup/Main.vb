@@ -205,7 +205,7 @@ Public Class Main
         Else
             For Each Item As ListViewItem In ListView.SelectedItems
                 My.Computer.FileSystem.DeleteDirectory(My.Settings.BkpsFolder + Item.Name, FileIO.DeleteDirectoryOption.DeleteAllContents)
-                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Deleted backup " & My.Settings.BkpsFolder & Item.Name)
+                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Deleted backup " & My.Settings.BkpsFolder & "\" & Item.Name)
             Next
         End If
     End Sub
@@ -280,22 +280,13 @@ Public Class Main
     End Sub
 
     Private Sub ClearBGW_RunWorkerCompleted(sender As System.Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ClearBGW.RunWorkerCompleted
-        RestoreTimer.Stop()
-        If RestoreError = True Then
-            StatusLabel.Text = "Error!"
-            MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Error!", "There was an error while restoring.", ToolTipIcon.Error)
-            MsgBox("Error:" & vbNewLine & RestoreErrorDesc, MsgBoxStyle.Critical, "Error!")
-            ChangeProgressBarColor(ProgressBar.Handle, 1040, 2, 0)
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error)
-            StatusLabel.Text = "Ready!"
-            Exit Sub
-        End If
-
+        StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Cleared old Minecraft data.")
         ProgressBar.Style = ProgressBarStyle.Blocks
         ProgressBar.Value = 0
         TaskbarManager.Instance.SetProgressValue(0, 100)
         RestoreBGW.RunWorkerAsync()
         RestoreTimer.Start()
+        StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Starting restore...")
     End Sub
 
     Private Sub RestoreTimer_Tick(sender As System.Object, e As System.EventArgs) Handles RestoreTimer.Tick
@@ -324,7 +315,8 @@ Public Class Main
         If RestoreError = True Then
             StatusLabel.Text = "Error!"
             MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Error!", "There was an error during the restore.", ToolTipIcon.Error)
-            MsgBox("Error:" & vbNewLine & RestoreErrorDesc, MsgBoxStyle.Critical, "Error!")
+            MsgBox("There was an error while restoring. Please check the log for more info.", "Error!")
+            StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] " & RestoreErrorDesc)
             ChangeProgressBarColor(ProgressBar.Handle, 1040, 2, 0)
             TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error)
             StatusLabel.Text = "Ready!"
@@ -334,6 +326,7 @@ Public Class Main
         TaskbarManager.Instance.SetProgressValue(100, 100)
         StatusLabel.Text = "Restore Completed - Ready!"
         MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Restore Completed!", "Your restore has finished!", ToolTipIcon.Info)
+        StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Restore Complete.")
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles AboutToolStripMenuItem.Click
