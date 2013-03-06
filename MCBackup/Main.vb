@@ -204,7 +204,8 @@ Public Class Main
             End If
         Else
             For Each Item As ListViewItem In ListView.SelectedItems
-                My.Computer.FileSystem.DeleteDirectory(APPDATA + "\.mcbackup\backups\" + Item.Name, FileIO.DeleteDirectoryOption.DeleteAllContents)
+                My.Computer.FileSystem.DeleteDirectory(My.Settings.BkpsFolder + Item.Name, FileIO.DeleteDirectoryOption.DeleteAllContents)
+                StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Deleted backup " & My.Settings.BkpsFolder & Item.Name)
             Next
         End If
     End Sub
@@ -239,7 +240,7 @@ Public Class Main
             ElseIf MsgBox("Are you sure you want to restore to the selected backup? This will delete any existing data.", MsgBoxStyle.YesNo, "Are you sure?") = MsgBoxResult.No Then
                 Exit Sub
             End If
-
+            StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Restoring backup """ & My.Settings.BkpsFolder & "\" & ItemName)
             ItemName = Item.Name
             If My.Computer.FileSystem.DirectoryExists(My.Settings.BkpsFolder & "\" & ItemName & "\bin") Then
                 RestoreAll = True
