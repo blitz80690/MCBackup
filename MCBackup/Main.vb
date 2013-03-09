@@ -2,8 +2,6 @@
 Imports System.IO
 Imports System.Net
 Imports System.Threading
-Imports Microsoft.WindowsAPICodePack.Taskbar
-
 Public Class Main
     Public APPDATA As String = Environ("APPDATA")
     Private Source, Destination, ItemName As String
@@ -149,7 +147,6 @@ Public Class Main
         Dim PercentComplete As Integer = DestinationSize / SourceSize * 100
         If PercentComplete < 100 Then
             ProgressBar.Value = PercentComplete
-            TaskbarManager.Instance.SetProgressValue(PercentComplete, 100)
             StatusLabel.Text = "Backing up... (" & PercentComplete.ToString & "% Complete)"
         End If
     End Sub
@@ -173,13 +170,11 @@ Public Class Main
             MsgBox("There was an error while backing up. Please check the log for more information.", MsgBoxStyle.Critical, "Error!")
             StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] " & BackupErrorDesc)
             ChangeProgressBarColor(ProgressBar.Handle, 1040, 2, 0)
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error)
             StatusLabel.Text = "Ready!"
             Exit Sub
         End If
         StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Successfully backed up """ & BackupName & """")
         ProgressBar.Value = 100
-        TaskbarManager.Instance.SetProgressValue(100, 100)
         StatusLabel.Text = "Backup Finised - Ready!"
         MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Backup Done!", "Your backup has finished!", ToolTipIcon.Info)
     End Sub
@@ -231,7 +226,6 @@ Public Class Main
 
     Private Sub RestoreButton_Click(sender As System.Object, e As System.EventArgs) Handles RestoreButton.Click
         ChangeProgressBarColor(ProgressBar.Handle, 1040, 1, 0)
-        TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal)
         For Each Item As ListViewItem In ListView.SelectedItems
             If DateDiff("d", GetFolderDateCreated(My.Settings.BkpsFolder & "\" & Item.Name), Now) > 14 Then
                 If MsgBox("Are you sure you want to restore to the selected backup? This will delete any existing data, and it is more than 2 weeks old!", MsgBoxStyle.YesNo, "Are you sure?") = MsgBoxResult.No Then
@@ -283,7 +277,6 @@ Public Class Main
         StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Cleared old Minecraft data.")
         ProgressBar.Style = ProgressBarStyle.Blocks
         ProgressBar.Value = 0
-        TaskbarManager.Instance.SetProgressValue(0, 100)
         RestoreBGW.RunWorkerAsync()
         RestoreTimer.Start()
         StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Starting restore...")
@@ -295,7 +288,6 @@ Public Class Main
         Dim PercentComplete As Integer = DestinationSize / SourceSize * 100
         If PercentComplete < 100 Then
             ProgressBar.Value = PercentComplete
-            TaskbarManager.Instance.SetProgressValue(PercentComplete, 100)
             StatusLabel.Text = "Restoring... (" & PercentComplete.ToString & "% Complete)"
         End If
     End Sub
@@ -318,12 +310,10 @@ Public Class Main
             MsgBox("There was an error while restoring. Please check the log for more info.", "Error!")
             StreamWriter.WriteLine(LogTimeStamp() & "[SEVERE] " & RestoreErrorDesc)
             ChangeProgressBarColor(ProgressBar.Handle, 1040, 2, 0)
-            TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error)
             StatusLabel.Text = "Ready!"
             Exit Sub
         End If
         ProgressBar.Value = 100
-        TaskbarManager.Instance.SetProgressValue(100, 100)
         StatusLabel.Text = "Restore Completed - Ready!"
         MCBackupNotify.ShowBalloonTip(2500, "MCBackup - Restore Completed!", "Your restore has finished!", ToolTipIcon.Info)
         StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Restore Complete.")
@@ -421,7 +411,6 @@ Public Class Main
     Public Sub StartBackup()
         StreamWriter.WriteLine(LogTimeStamp() & "[INFO] Starting backup """ & BackupName & """")
         ChangeProgressBarColor(ProgressBar.Handle, 1040, 1, 0)
-        TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal)
         If BackupAll = True Then
             Source = My.Settings.MCFolder
             Destination = My.Settings.BkpsFolder & "\" & BackupName
